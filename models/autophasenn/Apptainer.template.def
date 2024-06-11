@@ -26,6 +26,7 @@ Stage: final
     install/app_requirements.txt app_requirements.txt
 
 %post
+    ln -sf /bin/bash /bin/sh
     pip install -r app_requirements.txt
 
 {{ apps_section }}

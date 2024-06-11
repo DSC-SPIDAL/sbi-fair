@@ -21,6 +21,7 @@ CMD_OPTIONS=''
 
 if [ -f ${MODEL_OPTIONS} ]; then
     CMD_OPTIONS=$(${SCIF_APPBIN_helpers}/yaml_to_cmd.py ${MODEL_OPTIONS})
+    CMD_OPTIONS=${CMD_OPTIONS/--epochs/--epoch} # for compatibility with other models
 fi
 
 python $SCIF_APPROOT_model/autophasenn/train_network_unsup_3D.py --DataFolder=${TRAIN_DATASET} --OutputFolder=${OUTPUT_DIR} $CMD_OPTIONS
