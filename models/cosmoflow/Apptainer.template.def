@@ -26,6 +26,8 @@ Stage: final
     install/app_requirements.txt app_requirements.txt
 
 %post
+    apt-get update
+    apt-get -y install cmake
     ln -sf /bin/bash /bin/sh
     pip install -r app_requirements.txt
 

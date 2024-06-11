@@ -29,11 +29,11 @@ References:
     ```bash
     ${SBI_FAIR_DIR}/tools/scripts/load_dataset.sh ${SBI_FAIR_DIR}/datasets/{{ dataset_file }}/datasets.yaml {{ dataset_name }}
     ```
-    {% if metadata.datasets|length > 1 %}
+    {% if metadata.datasets|length > 1 -%}
     > You can use any of the following datasets:
-    {% for dataset in metadata.datasets %}
-    > - `dataset.split('/')[1]
-    {% endfor %}
+    {% for dataset in metadata.datasets -%}
+    > -  {{ dataset.split('/')[1] }}
+    {% endfor -%}
     {% endif %}
 
 4. Create a file with parameters 
