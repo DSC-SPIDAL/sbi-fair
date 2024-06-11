@@ -1,0 +1,20 @@
+name: calogan
+builds:
+  docker: true
+  apptainer: true
+entrypoints:
+  train:
+    available: true 
+    implemented: true
+  evaluate:
+    available: false 
+  run:
+    available: false
+environments:
+  local:
+    runs_docker: 
+      cpu: true
+      gpu: false # cuBLAS issues, probably because of old (1.14) TF
+    runs_apptainer: 
+      cpu: true 
+      gpu: false #

@@ -1,0 +1,22 @@
+name: nanoconfinement
+builds:
+  docker: true
+  apptainer: true
+entrypoints:
+  train:
+    available: true 
+    implemented: true
+  evaluate:
+    available: true 
+    implemented: true
+  run:
+    available: false
+environments:
+  local:
+    runs_docker: 
+      cpu: true
+      gpu: true
+    runs_apptainer: 
+      cpu: true
+      gpu: true
+

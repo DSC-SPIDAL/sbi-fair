@@ -1,0 +1,227 @@
+--- Ions_surrogate_training_excluderandom_org.py	2024-04-18 16:03:56.664706041 -0400
++++ evaluate.py	2024-05-09 13:28:33.759910302 -0400
+@@ -8,25 +8,15 @@
+ # In[ ]:
+ 
+ 
+-from google.colab import drive
+-drive.mount._DEBUG = False
+-drive.mount('/content/gdrive/')
+-#Lib imports
++# Lib imports
++import os
+ import tensorflow as tf
+ import numpy as np
+-import pandas as pd
+-import matplotlib.pyplot as plt
+-%matplotlib inline
+-plt.style.use('default')
+-from sklearn.metrics import confusion_matrix
+-from sklearn.utils import shuffle
+-from sklearn.model_selection import train_test_split as spliter
+-from sklearn import preprocessing
+ import joblib
+-!pip3 install pickle5
+ import pickle5 as pickle
+-from sklearn.utils import shuffle
+-from collections import defaultdict
++
++import yaml
++
+ tf.__version__
+ 
+ # # Read the dataset
+@@ -46,10 +36,7 @@
+ # In[ ]:
+ 
+ 
+-file_path= "/content/gdrive/My Drive/Deeplearning/Lab_ML_Projects/Ions_in_confinement/all_data_4050/"
+-with open(file_path+ 'data_dump_density_preprocessed_train.pk', 'rb') as handle:
+-    processed_all_data_preprocessed_train = pickle.load(handle)
+-with open(file_path+ 'data_dump_density_preprocessed_test.pk', 'rb') as handle:
++with open(os.environ["TEST_DATASET"], "rb") as handle:
+     processed_all_data_preprocessed_test = pickle.load(handle)
+ 
+ # # Preprocess the dataset and create numpy arrays from dictionary objects
+@@ -118,156 +105,58 @@
+ # In[ ]:
+ 
+ 
+-#reduce training set size by randomly excluding N data.
+-np.random.seed(0)   #fix random seed
+-index_ = np.random.choice(len(processed_all_data_preprocessed_train.keys()), 0,replace=False)  #change choice size to select reduced training samples
+-#label_ = list(processed_all_data_preprocessed_10ns.keys())[index_]
+-excluded_index_ = np.delete(np.arange(0,len(processed_all_data_preprocessed_train.keys())), index_)
+-train_ = {}
+-exclude_ = {}
+-for index in index_:
+-    exclude_[list(processed_all_data_preprocessed_train.keys())[index]] = processed_all_data_preprocessed_train[list(processed_all_data_preprocessed_train.keys())[index]]
+-for index in excluded_index_:
+-    train_[list(processed_all_data_preprocessed_train.keys())[index]] = processed_all_data_preprocessed_train[list(processed_all_data_preprocessed_train.keys())[index]]
+-
+-
+-# In[ ]:
+-
+-
+-#Verify reduced training samples and the fixed independent testing samples
+-input_data, output, errors, z_data = preprocess_inputdata(train_)
+-input_data_test, output_test, errors_test, z_data_test = preprocess_inputdata(processed_all_data_preprocessed_test)
+-
+-# # Select data for model training
+-
+-# In[ ]:
+-
++input_data_test, output_test, errors_test, z_data_test = preprocess_inputdata(
++    processed_all_data_preprocessed_test
++)
+ 
+-#Using cross-validation with fraction of 0.8
+-train_test_split = 0.8
+-seed = 1
+ 
+-print("Input data shape: {}".format(input_data.shape))
+-print("Output data shape: {}".format(output.shape))
+ 
+-input_data_suff, output_suff,  errors_suff, z_data_shuff = shuffle(input_data, output, errors, z_data, random_state=seed)
+-#input_data_suff, output_suff,  errors_suff, z_data_shuff = shuffle(input_data, output, errors, z_data)
+-#input_data_suff_baseline, output_suff_baseline,  errors_suff_baseline, z_data_shuff_baseline = shuffle(input_data_baseline, output_baseline, errors_baseline, z_data_baseline, random_state=seed)
+ 
+-train_test_split_ = int(input_data_suff.shape[0]*train_test_split)
++print("Input data shape: {}".format(input_data_test.shape))
++print("Output data shape: {}".format(output_test.shape))
+ 
+-x_train = input_data_suff[0:train_test_split_]#.astype("float64")
+-x_test = input_data_suff[train_test_split_:]#.astype("float64")
+-#x_test_baseline = input_data_suff_baseline[train_test_split_:]#.astype("float64")
++x_test = input_data_test
++# x_test_baseline = input_data_suff_baseline[train_test_split_:]#.astype("float64")
+ 
+ 
+-y_train = output_suff[0:train_test_split_]#.astype("float64")
+-y_test = output_suff[train_test_split_:]#.astype("float64")
+-#y_test_baseline = output_suff_baseline[train_test_split_:]#.astype("float64")
++y_test = output_test
++# y_test_baseline = output_suff_baseline[train_test_split_:]#.astype("float64")
+ 
+-error_train = errors_suff[0:train_test_split_]#.astype("float64")
+-error_test = errors_suff[train_test_split_:]#.astype("float64")
+-#error_test_baseline = errors_suff_baseline[train_test_split_:]#.astype("float64")
++error_test = errors_test
++# error_test_baseline = errors_suff_baseline[train_test_split_:]#.astype("float64")
+ 
+-z_data_train = z_data_shuff[0:train_test_split_]#.astype("float64")
+-z_data_test = z_data_shuff[train_test_split_:]#.astype("float64")
+-#z_data_test_baseline = z_data_shuff_baseline[train_test_split_:]#.astype("float64")
++z_data_test = z_data_test
++# z_data_test_baseline = z_data_shuff_baseline[train_test_split_:]#.astype("float64")
+ 
+ 
+-#x_train, x_test, y_train, y_test = spliter.train_test_split(input_data, output, test_size=(1-train_test_split), random_state=100)
++# x_train, x_test, y_train, y_test = spliter.train_test_split(input_data, output, test_size=(1-train_test_split), random_state=100)
+ 
+-print("Train input: ", x_train.shape)
+-print("Train Output", y_train.shape)
+ print("Test input: ", x_test.shape)
+ print("Test Output", y_test.shape)
+ 
+ # # Input feature scaling
+ 
+-# ***scaler_new.pkl*** -----> Scaler modules fitting with the maximum and the minimum of the original input parameter spaces. 
+-# 
++# ***scaler_new.pkl*** -----> Scaler modules fitting with the maximum and the minimum of the original input parameter spaces.
++#
+ 
+ # In[ ]:
++model_options = os.environ["MODEL_OPTIONS"]
++if os.path.exists(model_options):
++    with open(model_options) as fh:
++        parameters = yaml.safe_load(fh)
++else:
++    parameters = {}
+ 
+ 
+-scaler = joblib.load(file_path+'scaler_new.pkl')
+-scaled_x_train = scaler.transform(x_train)
++scaler = joblib.load(parameters.get("scaler", os.environ["SCIF_APPDATA_model"] + "/scaler_new.pkl"))
+ scaled_x_test = scaler.transform(x_test)
+ 
+ # # Model parameters
+ 
+ # In[ ]:
+ 
+-
+-# hyper parameters
+-learningRate = 0.0001
+-beta_1 = 0.9
+-beta_2 = 0.999
+-decay = 0.000000
+-
+-batchSize = 32
+-dropout_rate=0.1
+-epochs= 20000
+-
+-# Network Parameters
+-inputFeatures = 7
+-hiddenUnits1 = 256 # 1st layer number of neurons
+-hiddenUnits2 = 512 # 2nd layer number of neurons
+-#hiddenUnits3 = 512 # 3rd layer number of neurons
+-outputClasses = NUM_OF_BINS*2
+-
+-# # ANN Model
+-
+-# In[ ]:
+-
+-
+-#This is He initializer
+-#initializer = tf.keras.initializers.VarianceScaling(scale=2.0, mode='fan_in', distribution='truncated_normal', seed=None)
+-initializer = tf.keras.initializers.GlorotNormal(seed=None)
+-
+-model = tf.keras.models.Sequential()
+-model.add(tf.keras.layers.Dense(hiddenUnits1, activation=tf.nn.relu, kernel_initializer=initializer, input_shape=(inputFeatures, )))
+-model.add(tf.keras.layers.Dropout(rate=dropout_rate))
+-model.add(tf.keras.layers.Dense(hiddenUnits2, activation=tf.nn.sigmoid , kernel_initializer=initializer))
+-model.add(tf.keras.layers.Dropout(rate=dropout_rate))
+-model.add(tf.keras.layers.Dense(outputClasses, activation=tf.nn.relu, kernel_initializer=initializer))
+-
+-
+-model.compile(loss=tf.keras.losses.mean_squared_error, optimizer=tf.keras.optimizers.Adam(learning_rate=learningRate, beta_1=beta_1,beta_2=beta_2, decay=decay))
+-
+-# # Training
+-
+-# In[ ]:
+-
+-
+-history = model.fit(scaled_x_train, y_train, epochs=epochs, batch_size = batchSize, verbose = 1, validation_data = (scaled_x_train, y_train), shuffle=True)
+-
+-# # Model details and save the model
+-
+-# In[ ]:
+-
+-
+-model.summary()
+-file_path_model = "/content/gdrive/My Drive/Deeplearning/Lab_ML_Projects/Ions_in_confinement/saved_model/"
+-model.save(file_path_model+ 'my_model_base_excludeRandom_3550.h5')
+-print(history.history.keys())
+-# summarize history for loss
+-plt.plot(history.history['loss'])
+-plt.plot(history.history['val_loss'])
+-plt.yscale('log')
+-plt.title('model loss')
+-plt.ylabel('loss')
+-plt.xlabel('epoch')
+-plt.legend(['train', 'test'], loc='upper left')
+-plt.show()
+-
+-# # Load the models
+-
+-# In[ ]:
+-
+-
+-file_path_model = "/content/gdrive/My Drive/Deeplearning/Lab_ML_Projects/Ions_in_confinement/saved_model/"
+-#scaler = joblib.load(file_path+'scaler_new.pkl')
+-new_model = tf.keras.models.load_model(file_path_model+'my_model_base_excludeRandom_3550.h5', compile=False)
++# scaler = joblib.load(file_path+'scaler_new.pkl')
++new_model = tf.keras.models.load_model(os.environ["INPUT_MODEL"], compile=False)
+ new_model.summary()
+ 
+ # # Predict and evalute RMSE value

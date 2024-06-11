@@ -1,0 +1,10 @@
+{
+    "_extensions" : ["local_extensions.from_yaml", "local_extensions.absolute_path"],
+    "metadata_file": "metadata.yaml",
+    "__metadata_file_path": "{{ cookiecutter.metadata_file | absolute_path }}",
+    "project_name": "Surrogate model",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
+    "runtime" : {
+        "container": "tensorflow/tensorflow"
+    }
+}

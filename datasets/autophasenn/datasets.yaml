@@ -1,0 +1,4 @@
+- name: aicdi
+  data_files:
+    - split: default
+      url: https://github.com/YudongYao/AutoPhaseNN/raw/3375cf98206a83f329faaf4c74eed924f3f4a2fe/TF2/aicdi_data.txt

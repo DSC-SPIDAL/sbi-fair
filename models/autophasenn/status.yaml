@@ -1,0 +1,18 @@
+name: autophasenn
+name: ptychonn
+builds:
+  docker: true
+  apptainer: true
+entrypoints:
+  train:
+    available: true 
+    implemented: true
+environments:
+  local:
+    # Not enough memory to run locally
+    runs_docker: 
+      cpu: false 
+      gpu: false
+    runs_apptainer: 
+      cpu: false 
+      gpu: false

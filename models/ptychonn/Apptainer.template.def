@@ -1,0 +1,32 @@
+Bootstrap: docker
+From: python:3.12-slim
+Stage: builder
+
+%post
+    apt update
+    apt-get -y install git
+    pip install -r /install/install_requirements.txt
+
+%files
+    install /install
+    helpers /helpers
+
+{{ install_section }}
+
+#################################
+
+Bootstrap: docker
+From: pytorch/pytorch:1.7.1-cuda11.0-cudnn8-runtime
+Stage: final
+
+%files from builder
+    /scif/* /scif
+
+%files 
+    install/app_requirements.txt app_requirements.txt
+
+%post
+    conda install -y mpi4py
+    pip install -r app_requirements.txt
+
+{{ apps_section }}

@@ -1,0 +1,6 @@
+- name: ptychonn_20191008_39
+  data_files:
+    - split: default
+      url:
+        diffraction: https://github.com/mcherukara/PtychoNN/raw/master/data/20191008_39_diff.npz
+        realspace: https://github.com/mcherukara/PtychoNN/raw/master/data/20191008_39_amp_pha_10nm_full.npy

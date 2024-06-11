@@ -1,0 +1,2 @@
+%appinstall model
+cd /install; ./install.sh

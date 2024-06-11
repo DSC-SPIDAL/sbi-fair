@@ -1,0 +1,64 @@
+16,19d15
+< import matplotlib.pylab as plt
+< from scipy.ndimage.measurements import center_of_mass as com
+< from scipy.ndimage.interpolation import shift
+< from scipy.ndimage.interpolation import rotate as R
+21,22d16
+< from joblib import Parallel, delayed
+< import shutil, tempfile
+27a22
+> from os import environ
+31c26
+< data_folder = './aicdi_data/' #the folder stores the downloaded data
+---
+> data_folder = environ.get('INPUT_DIR', '') #the folder stores the downloaded data
+35c30
+< with open(data_folder+'aicdi_data.txt','r') as f:
+---
+> with open(environ.get('FILE_LIST'),'r') as f:
+47c42
+< save_folder = './CDI_simulation_upsamp_noise/' #theta
+---
+> save_folder = environ.get('OUTPUT_DIR', '') 
+78,82c73,83
+<     if isinstance(filename, list):
+<         if len(filename)>1:
+<             for filename_each in tqdm(filename):
+<                 realspace,farfield = create_obj(filename_each)
+<                 name = str(filename_each).split('.')[0]
+---
+>     try:
+>         if isinstance(filename, list):
+>             if len(filename)>1:
+>                 for filename_each in tqdm(filename):
+>                     realspace,farfield = create_obj(filename_each)
+>                     name = str(filename_each).split('.')[0]
+>                     np.savez(save_folder+name+'_0.npz',farfield,realspace)
+>                     
+>             else:
+>                 realspace,farfield = create_obj(filename[0])
+>                 name = str(filename[0]).split('.')[0]
+84c85
+<                 
+---
+>                     
+86,87c87,88
+<             realspace,farfield = create_obj(filename[0])
+<             name = str(filename[0]).split('.')[0]
+---
+>             realspace,farfield = create_obj(filename)
+>             name = str(filename).split('.')[0]
+89,93c90,92
+<                 
+<     else:
+<         realspace,farfield = create_obj(filename)
+<         name = str(filename).split('.')[0]
+<         np.savez(save_folder+name+'_0.npz',farfield,realspace)
+---
+>     except Exception as e:
+>         print(e)
+>         raise
+99c98
+< n_cores = 12
+---
+> n_cores = 4

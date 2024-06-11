@@ -1,0 +1,11 @@
+description: AutoPhaseNN is DL-based approach which gives direct inversion of the 3D BCDI data from the far-field measurement to the real space image. By incoorporating the forward physical model of the coherent diffraction imaging process, the model is trained with only measured diffraction patterns without needing real space images.
+name: AutoPhaseNN
+homepage: https://github.com/YudongYao/AutoPhaseNN
+references:
+  - https://doi.org/10.1038/s41524-022-00803-w
+repository:
+  type: git
+  url: https://github.com/YudongYao/AutoPhaseNN
+  commit: 3375cf98206a83f329faaf4c74eed924f3f4a2fe
+datasets:
+  - autoPhaseNN/aicdi

@@ -1,0 +1,12 @@
+description: PtychoNN is a two-headed encoder-decoder network that simultaneously predicts sample amplitude and phase from input diffraction data alone.
+name: PtychoNN
+homepage: https://www.anl.gov/psc/ptychonn-uses-neural-networks-for-faster-xray-imaging
+references:
+  - https://doi.org/10.1063/5.0013065
+  - https://github.com/mcherukara/PtychoNN
+repository:
+  type: git
+  url: https://github.com/Presciman/PtychoNN-torch
+  commit: 61e0475abb258c6fbdc1fdf4e9f7961b8e20085f
+datasets:
+  - ptychonn/ptychonn_20191008_39

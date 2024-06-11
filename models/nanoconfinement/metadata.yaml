@@ -1,0 +1,11 @@
+description: ML-based surrogate for prediction of structural and dynamical properties of ions in nanoconfinement
+name: Nanoconfinement
+homepage: https://nanohub.org/resources/nanoconfinement
+references:
+  - https://doi.org/10.1016/j.jocs.2020.101107
+repository:
+  type: "git"
+  url: https://github.com/softmaterialslab/nanoconfinement-md
+  commit: 7c6aa48d2260da15b243702747ebe1c806c5eee9
+datasets:
+  - nanoconfinement/nanoconfinement_4050

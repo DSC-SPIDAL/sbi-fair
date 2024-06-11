@@ -1,0 +1,20 @@
+name: {{ cookiecutter.project_slug }}
+builds:
+  docker: null
+  apptainer: null
+entrypoints:
+  train:
+    available: null 
+    implemented: null
+  evaluate:
+    available: null 
+  run:
+    available: null
+environments:
+  local:
+    runs_docker: 
+      cpu: null
+      gpu: null 
+    runs_apptainer: 
+      cpu: null 
+      gpu: null 

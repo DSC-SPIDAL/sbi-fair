@@ -1,0 +1,35 @@
+--- train_mpi.orig.py	2024-05-30 15:40:44.935917471 -0400
++++ train_mpi.py	2024-05-31 13:32:35.962648454 -0400
+@@ -1,3 +1,4 @@
++#!/usr/bin/env python3
+ #Version 1.0 for proposed design.
+ #This this version, prefetch optimization includes two stages and compare with the pytorch loading
+ #No training process is needed in this version since the optimization is on data loading I/O
+@@ -189,8 +190,8 @@
+ 
+ # load data
+ # data path
+-data_path = '/path/to/PtychoNN/data/20191008_39_diff.npz'
+-label_path = '/path/to/PtychoNN/data/20191008_39_amp_pha_10nm_full.npy'
++data_path = '/input/train_dataset/diffraction'
++label_path = '/input/train_dataset/realspace'
+ 
+ data_diffr = np.load(data_path)['arr_0']
+ real_space = np.load(label_path)
+@@ -391,11 +392,11 @@
+         param.grad.data /= size
+ 
+ #Profiling
+-prof = torch.profiler.profile(
+-        schedule=torch.profiler.schedule(wait=1, warmup=1, active=10, repeat=4),
+-        on_trace_ready=torch.profiler.tensorboard_trace_handler('/path/to/save/trace/'),
+-        record_shapes=True,
+-        with_stack=True)
++# prof = torch.profiler.profile(
++#         schedule=torch.profiler.schedule(wait=1, warmup=1, active=10, repeat=4),
++#         on_trace_ready=torch.profiler.tensorboard_trace_handler('/path/to/save/trace/'),
++#         record_shapes=True,
++#         with_stack=True)
+ load_num=[]
+ 
+ def train(train_loader,metrics,epoch):

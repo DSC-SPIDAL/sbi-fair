@@ -1,0 +1,6 @@
+- name: nanoconfinement_4050
+  data_files:
+    - split: train
+      url: https://github.com/softmaterialslab/nanoconfinement-md/raw/master/python/surrogate_samplesize/all_data_4050/data_dump_density_preprocessed_train.pk
+    - split: test
+      url: https://github.com/softmaterialslab/nanoconfinement-md/raw/master/python/surrogate_samplesize/all_data_4050/data_dump_density_preprocessed_test.pk

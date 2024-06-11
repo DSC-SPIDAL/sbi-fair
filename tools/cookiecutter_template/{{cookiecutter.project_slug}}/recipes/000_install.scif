@@ -1,0 +1,7 @@
+%appinstall model
+cd /install; ./install.sh
+
+%appinstall helpers
+mkdir -p  ${SCIF_APPROOT}/bin
+cp /helpers/* ${SCIF_APPROOT}/bin
+chmod +x ${SCIF_APPROOT}/bin/*

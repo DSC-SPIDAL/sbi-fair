@@ -1,0 +1,20 @@
+name: ptychonn
+builds:
+  docker: true
+  apptainer: true
+entrypoints:
+  train:
+    available: true 
+    implemented: true
+  evaluate:
+    available: false 
+  run:
+    available: false
+environments:
+  local:
+    runs_docker: 
+      cpu: false # Needs extra option passing to run on CPU
+      gpu: true
+    runs_apptainer: 
+      cpu: false # Needs option to run on CPU
+      gpu: true

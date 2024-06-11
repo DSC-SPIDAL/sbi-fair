@@ -1,0 +1,15 @@
+- name: calogan_eplus
+  data_files:
+    - split: default
+      url:
+        eplus.hdf5: https://data.mendeley.com/public-files/datasets/pvn3xc3wy5/files/82030895-c680-432d-ac68-a6f2c8ed2641/file_downloaded
+- name: calogan_gamma
+  data_files:
+    - split: default
+      url:
+        gamma.hdf5: https://data.mendeley.com/public-files/datasets/pvn3xc3wy5/files/1141aa57-edc0-477a-a32c-a38e5934b453/file_downloaded
+- name: calogan_piplus
+  data_files:
+    - split: default
+      url:
+        piplus.hdf5: https://data.mendeley.com/public-files/datasets/pvn3xc3wy5/files/292fa8da-1877-482b-9fd3-df237d43b142/file_downloaded

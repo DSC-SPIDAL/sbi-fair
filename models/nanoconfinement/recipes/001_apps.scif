@@ -1,0 +1,41 @@
+%apphelp model
+This is placeholder app to reference the model and related files
+This model is installed using separate build stage
+
+#################################
+# Train app
+%apphelp train
+Train the model given the train and validation datasets and relevant 
+parameters. Outputs trained model as /output/model
+
+%apprun train
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export OUTPUT_MODEL=${OUTPUT_DIR}/model
+export TRAIN_DATASET=${INPUT_DIR}/train_dataset
+export TEST_DATASET=${INPUT_DIR}/test_dataset
+#export SCALER_DATASET=${INPUT_DIR}/scaler_dataset
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+python $SCIF_APPBIN_model/train.py
+
+#################################
+# Evaluate app
+%apphelp evaluate
+Evaluate the model given a trained model and test dataset
+
+%apprun evaluate
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export INPUT_MODEL=${INPUT_DIR}/model
+export TEST_DATASET=${INPUT_DIR}/test_dataset
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+python $SCIF_APPBIN_model/evaluate.py
+
+#################################
+# Production app
+%apphelp run
+Run the specified trained model given the input dataset.
+
+%apprun run
+# Replace with the command to run model
+echo 'Not implemented'

@@ -1,0 +1,80 @@
+%apphelp model
+This is placeholder app to reference the model and related files
+This model is installed using separate build stage
+
+%apphelp helpers
+This is placeholder app to reference the helpers files
+These helpers are installed using separate build stage
+#################################
+# Train app
+%apphelp train
+Train the model given the train and validation datasets and relevant
+parameters. Outputs trained model as /output/model
+
+%apprun train
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export OUTPUT_MODEL=${OUTPUT_DIR}/model
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+export TRAIN_DATASET=${INPUT_DIR}/train_dataset
+CMD_OPTIONS=''
+
+# Prepare dataset config
+# Use epochs for compatibility with others
+# cat > /output/data_config.yaml <<EOF
+# data:
+#     data_dir = /input/train_dataset
+#     n_train = $(ls -l /input/train_dataset/train/*.tfrecord)
+#     n_valid = $(ls -l /input/train_dataset/validation/*.tfrecord)
+#     n_epochs = $(${SCIF_APPBIN_helpers}yq '.epochs' ${MODEL_OPTIONS})
+# EOF
+
+# # Take existing config and modify
+# if [ -f ${MODEL_OPTIONS} ]; then
+#     ${SCIF_APPBIN_helpers}/yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2)' \
+#         ${SCIF_APPBIN_model}/cosmoflow/configs/cosmo.yaml \
+#         ${MODEL_OPTIONS} \
+#         /output/data_config.yaml > /output/run_config.yaml
+# else
+#     ${SCIF_APPBIN_helpers}/yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' \
+#         ${SCIF_APPBIN_model}/cosmoflow/configs/cosmo.yaml \
+#         /output/data_config.yaml > /output/run_config.yaml
+# fi
+
+if [ -f ${MODEL_OPTIONS} ]; then
+    CMD_OPTIONS=$(${SCIF_APPBIN_helpers}/yaml_to_cmd.py ${MODEL_OPTIONS})
+    CMD_OPTIONS=${CMD_OPTIONS/--epochs/--n-epochs} # for compatibility with other models
+fi
+
+python3 ${SCIF_APPROOT_model}/cosmoflow/train.py ${CMD_OPTIONS} \
+ --output-dir ${OUTPUT_DIR} \
+ --data-dir ${TRAIN_DATASET} \
+ --n-valid $(ls -l ${TRAIN_DATASET}/validation/*.tfrecord | wc -l) \
+ --n-train $(ls -l ${TRAIN_DATASET}/train/*.tfrecord | wc -l) \
+ ${SCIF_APPROOT_model}/cosmoflow/configs/cosmo.yaml 
+
+#################################
+# Evaluate app
+%apphelp evaluate
+Evaluate the model given a trained model and test dataset
+
+%apprun evaluate
+echo "Not implemented"
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export INPUT_MODEL=${INPUT_DIR}/model
+export TEST_DATASET=${INPUT_DIR}/test_dataset
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+
+#################################
+# Production app
+%apphelp run
+Run the specified trained model given the input dataset.
+
+%apprun run
+echo "Not implemented"
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export INPUT_MODEL=${INPUT_DIR}/model
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+python $SCIF_APPBIN_model/run.py
