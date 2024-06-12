@@ -5,7 +5,7 @@ Link to the application:
 {{ metadata.homepage }}
 
 References: 
-{% for url in metadata.references %}
+{% for url in metadata.references -%}
 - {{ url }}
 {% endfor %}
 
