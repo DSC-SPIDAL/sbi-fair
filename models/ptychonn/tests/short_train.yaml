@@ -1,0 +1,7 @@
+app: train
+dataset:
+  source: ptychonn/ptychonn_20191008_39
+  mounts: 
+    - default:/input/train_dataset
+options:
+  epochs: 2

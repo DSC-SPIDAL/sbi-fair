@@ -1,0 +1,7 @@
+app: train
+dataset:
+  source: calogan/calogan_eplus
+  mounts: 
+    - default/eplus.hdf5:/input/train_dataset
+options:
+  epochs: 2

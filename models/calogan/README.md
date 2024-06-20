@@ -53,7 +53,7 @@ References:
 
 2. Run Training 
     > At the moment the provided containers are likely to fail to using GPU with recent
-    > systems due to CUDA incopatibilities. We are working to fix that.
+    > systems due to CUDA incompatibilities. We are working to fix that.
     ```bash
     GPU_SWITCH='' # or '--runtime=nvidia --gpus all' for GPU workloads
     # Mount the directories with the dataset
@@ -71,7 +71,7 @@ References:
 
 2. Run Training 
     > At the moment the provided containers are likely to fail to using GPU with recent
-    > systems due to CUDA incopatibilities. We are working to fix that.
+    > systems due to CUDA incompatibilities. We are working to fix that.
     ```bash
     GPU_SWITCH=''  # or '--nv' for GPU workloads
     # Mount the directories with the dataset

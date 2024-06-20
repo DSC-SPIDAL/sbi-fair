@@ -1,0 +1,9 @@
+{% set metadata = cookiecutter.__metadata_file_path | from_yaml  -%}
+{% set dataset_file, dataset_name = metadata.datasets[0].split('/') -%}
+app: train
+dataset:
+  source: {{ metadata.datasets[0] }}
+  mounts: 
+    - default:/input/train_dataset
+options:
+  epochs: 2

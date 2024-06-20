@@ -15,7 +15,7 @@ parameters. Outputs trained model as /output/model
 export INPUT_DIR=/input
 export OUTPUT_DIR=/output
 export OUTPUT_MODEL=${OUTPUT_DIR}/model
-export TEST_DATASET=${INPUT_DIR}/test_dataset
+export TRAIN_DATASET=${INPUT_DIR}/train_dataset
 export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
 CMD_OPTIONS=''
 
