@@ -17,6 +17,7 @@ class ContainerSystem(object):
         with open(output_dir / "options.yaml", "w") as fh:
             yaml.dump(test_config["options"], fh)
         cmd = self.get_cmd(test_config, output_dir, input_dir, gpu_switch)
+        print(cmd)
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         return result
 
@@ -25,8 +26,7 @@ class Apptainer(ContainerSystem):
     system_name = "Apptainer"
     gpu_switch = {"cpu": "", "gpu": "--nv"}
 
-    @property
-    def build_script(self):
+    def build_cmd(self):
         return self.surrogate_path / "build_apptainer.sh"
 
     @property
@@ -34,7 +34,7 @@ class Apptainer(ContainerSystem):
         return self.surrogate_path.name + ".sif"
 
     def exists(self):
-        (self.surrogate_path / self.container_name).exists()
+        return (self.surrogate_path / self.container_name).exists()
 
     def get_cmd(self, test_config, output_dir, input_dir, gpu_switch):
         """Command to run to execute app"""

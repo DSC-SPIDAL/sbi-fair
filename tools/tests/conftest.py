@@ -32,7 +32,13 @@ def get_nvidia_info():
     nvidia_info = subprocess.run(
         ["nvidia-smi", "-x", "-q"], capture_output=True, text=True
     )
-    nvidia_info_tree = ET.fromstring(nvidia_info.stdout)
+    if nvidia_info.returncode != 0:
+        return {"gpu": None}
+    try:
+        nvidia_info_tree = ET.fromstring(nvidia_info.stdout)
+    except:
+        return {"gpu": None}
+
     nvidia_info_dict = xml_to_dict(nvidia_info_tree)
     # Select necessary info
     selected = [
