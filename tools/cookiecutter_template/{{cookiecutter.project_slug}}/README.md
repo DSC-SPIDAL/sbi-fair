@@ -27,7 +27,7 @@ References:
 3. Get the datasets for training
 {% set dataset_file, dataset_name = metadata.datasets[0].split('/') %}
     ```bash
-    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.sh ${SBI_FAIR_DIR}/datasets/{{ dataset_file }}/datasets.yaml {{ dataset_name }}
+    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.py ${SBI_FAIR_DIR}/datasets/{{ dataset_file }}/datasets.yaml {{ dataset_name }}
     ```
     {% if metadata.datasets|length > 1 -%}
     > You can use any of the following datasets:

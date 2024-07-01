@@ -10,16 +10,16 @@ in the `loader` directory or `loader.sh` script. The entrypoints are set so they
 from the `url` mounted at `/input/dataset`. For example to build and run Docker based loader:
 
 The example script to load the datasets from the `datasets.yaml`t hat can be used for testing to load is here:
-`tools/scripts/load_dataset.sh`. It can be used to download and process specific dataset and split
+`tools/scripts/load_dataset.py`. It can be used to download and process specific dataset and split
 or all datasets in the file:
 
 ```bash
 # Load all datasets 
-./tools/scripts/load_dataset.sh datasets/cosmoflow/datasets.yaml
+./tools/scripts/load_dataset.py datasets/cosmoflow/datasets.yaml
 # Load single dataset
-./tools/scripts/load_dataset.sh datasets/cosmoflow/datasets.yaml cosmoUniverse_2019_05_4parE_tf_v2_mini
+./tools/scripts/load_dataset.py datasets/cosmoflow/datasets.yaml cosmoUniverse_2019_05_4parE_tf_v2_mini
 # Load specific split
-./tools/scripts/load_dataset.sh datasets/cosmoflow/datasets.yaml cosmoUniverse_2019_05_4parE_tf_v2_mini default
+./tools/scripts/load_dataset.py datasets/cosmoflow/datasets.yaml cosmoUniverse_2019_05_4parE_tf_v2_mini default
 ```
 
 For manual loading download the data from the provided URL and if necessary process the downloaded file using 
@@ -64,7 +64,7 @@ For example to run the nanoconfinement surrogate:
 ```bash
 mkdir nanoconfinement_test && cd nanoconfinement_test
 # Download the example dataset
-../tools/scripts/load_dataset.sh ../datasets/nanoconfinement/datasets.yaml 
+../tools/scripts/load_dataset.py ../datasets/nanoconfinement/datasets.yaml 
 # Test both docker and apptainer using GPU and run train and evaluate apps
 ../tools/scripts/test_model.sh ../models/nanoconfinement nanoconfinement_4050/train/data_dump_density_preprocessed_train.pk nanoconfinement_4050/test/data_dump_density_preprocessed_test.pk train evaluate
 ```

@@ -37,7 +37,7 @@ References:
     > ```
 
     ```bash
-    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.sh ${SBI_FAIR_DIR}/datasets/autophasenn/datasets.yaml aicdi
+    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.py ${SBI_FAIR_DIR}/datasets/autophasenn/datasets.yaml aicdi
     ```
 
 4. Create a file with parameters 

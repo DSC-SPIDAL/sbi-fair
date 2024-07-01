@@ -27,7 +27,7 @@ References:
 3. Get the datasets for training
 
     ```bash
-    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.sh ${SBI_FAIR_DIR}/datasets/nanoconfinement/datasets.yaml nanoconfinement_4050
+    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.py ${SBI_FAIR_DIR}/datasets/nanoconfinement/datasets.yaml nanoconfinement_4050
     ```
     
 

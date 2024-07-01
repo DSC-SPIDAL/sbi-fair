@@ -27,7 +27,7 @@ References:
 3. Get the datasets for training
 
     ```bash
-    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.sh ${SBI_FAIR_DIR}/datasets/cosmoflow/datasets.yaml cosmoUniverse_2019_05_4parE_tf_v2_mini
+    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.py ${SBI_FAIR_DIR}/datasets/cosmoflow/datasets.yaml cosmoUniverse_2019_05_4parE_tf_v2_mini
     ```
     > You can use any of the following datasets:
     > -  cosmoUniverse_2019_05_4parE_tf_v2_mini

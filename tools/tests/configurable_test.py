@@ -113,7 +113,7 @@ def dataset(test_config, data_repo, tmp_path_factory):
     dataset_config = data_repo / input_dataset[0] / "datasets.yaml"
     output_dir = tmp_path_factory.mktemp("data")
     result = subprocess.run(
-        [TOOLS_PATH / "scripts" / "load_dataset.sh", dataset_config, input_dataset[1]],
+        [TOOLS_PATH / "scripts" / "load_dataset.py", dataset_config, input_dataset[1]],
         capture_output=True,
         text=True,
         cwd=output_dir,

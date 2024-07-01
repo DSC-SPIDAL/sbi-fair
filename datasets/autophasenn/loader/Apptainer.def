@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: python:3.12-slim
+
+%post
+    apt-get update
+    apt-get -y install wget patch
+    pip install -r /install/requirements.txt
+    /install/install.sh
+
+%files 
+    install /install
+
+%runscript
+    /install/load.sh 

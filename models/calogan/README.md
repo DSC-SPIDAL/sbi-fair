@@ -27,7 +27,7 @@ References:
 3. Get the datasets for training
 
     ```bash
-    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.sh ${SBI_FAIR_DIR}/datasets/calogan/datasets.yaml calogan_eplus
+    ${SBI_FAIR_DIR}/tools/scripts/load_dataset.py ${SBI_FAIR_DIR}/datasets/calogan/datasets.yaml calogan_eplus
     ```
     > You can use any of the following datasets:
     > -  calogan_eplus
