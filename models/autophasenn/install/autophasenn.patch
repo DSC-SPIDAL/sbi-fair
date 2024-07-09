@@ -1,0 +1,10 @@
+diff --git a/TF2/train_network_unsup_3D.py b/TF2/train_network_unsup_3D.py
+index eafe854..1b9b7f8 100755
+--- a/TF2/train_network_unsup_3D.py
++++ b/TF2/train_network_unsup_3D.py
+@@ -445,4 +445,4 @@ if __name__ == '__main__':
+     # save learning rate
+     # lr = reduce_lr.history['lr']
+     # iteratin = reduce_lr.history['iterations']
+-    np.save('%s/str_lr' % result_path, reduce_lr.history)
++    #np.save('%s/str_lr' % result_path, reduce_lr.history)

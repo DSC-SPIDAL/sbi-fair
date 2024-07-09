@@ -24,7 +24,7 @@ if [ -f ${MODEL_OPTIONS} ]; then
     CMD_OPTIONS=${CMD_OPTIONS/--epochs/--epoch} # for compatibility with other models
 fi
 
-python $SCIF_APPROOT_model/autophasenn/train_network_unsup_3D.py --DataFolder=${TRAIN_DATASET} --OutputFolder=${OUTPUT_DIR} $CMD_OPTIONS
+eval python $SCIF_APPROOT_model/autophasenn/train_network_unsup_3D.py --DataFolder=${TRAIN_DATASET} --OutputFolder=${OUTPUT_DIR} ${CMD_OPTIONS}
 
 #################################
 # Evaluate app

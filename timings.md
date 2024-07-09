@@ -12,13 +12,13 @@ and might not be optimal for the testing hardware.
 
     - Rivanna/V100:
         - 2x Intel(R) Xeon(R) Gold 6148; cores 40; memory 375GB
-    - NVIDIA Tesla V100-SXM2; memory 32GB
+        - NVIDIA Tesla V100-SXM2; memory 32GB
 
 2. Results
 
-    | Model           | P5570_cpu     | P5570_gpu     | Rivanna_cpu | Rivanna/V100  |
+    | Model           | P5570/CPU     | P5570/A2000   | Rivanna/CPU | Rivanna/V100  |
     |-----------------|:-------------:|:-------------:|:-----------:|:-------------:|
-    | autophasenn     |    ✗          | ✗             |             |               |
+    | autophasenn     |    ✗          | ✗             | 1044.6 (5.6)|  59.0  (1.9)  |
     | calogan         |               |               | 1659        |  438.7 (2.7)  |
     | cosmoflow       |   1380.0      | 602.0         | 497         |  250.3 (2.5)  |
     | nanoconfinement |   5.94 (0.16) | 9.9 (0.23)    | 8.92 (0.3)  |   16.67 (0.28)|

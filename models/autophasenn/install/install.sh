@@ -18,4 +18,6 @@ git init; git remote add origin https://github.com/YudongYao/AutoPhaseNN
 git fetch --depth 1 --filter=blob:limit=10M origin 3375cf98206a83f329faaf4c74eed924f3f4a2fe
 git checkout FETCH_HEAD
 
+git apply /install/autophasenn.patch
+
 cp -r TF2 ${SCIF_APPROOT}/autophasenn
