@@ -1,3 +1,4 @@
+import hashlib
 import os
 import subprocess
 import pytest
@@ -108,10 +109,14 @@ def test_config(surrogate_path, test_config_name):
 
 
 @pytest.fixture(scope="session")
-def dataset(test_config, data_repo, tmp_path_factory):
+def dataset(test_config, data_repo, pytestconfig):
     input_dataset = test_config["dataset"]["source"].split("/")
     dataset_config = data_repo / input_dataset[0] / "datasets.yaml"
-    output_dir = tmp_path_factory.mktemp("data")
+    cache_dir_name = (
+        hashlib.md5(bytes(dataset_config)).hexdigest() + "_" + input_dataset[1]
+    )
+    output_dir = pytestconfig.cache.mkdir(cache_dir_name)
+    # output_dir = tmp_path_factory.mktemp("data")
     result = subprocess.run(
         [TOOLS_PATH / "scripts" / "load_dataset.py", dataset_config, input_dataset[1]],
         capture_output=True,
