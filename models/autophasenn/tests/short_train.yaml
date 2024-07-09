@@ -1,9 +1,10 @@
 app: train
 dataset:
-  source: autophasenn/aicdi
+  source: autophasenn/aicdi_sample
   mounts: 
     - default:/input/train_dataset
 options:
   epochs: 2
   gpu_num: 1
   train_size: 100
+  lr_type: Step
