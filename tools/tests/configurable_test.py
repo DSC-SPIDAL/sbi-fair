@@ -159,4 +159,6 @@ def test_container(
     msgname = (
         f"{build_container.system_name}({build_container.container_name}, {gpu_switch})"
     )
-    assert result.returncode == 0, f"{msgname} run failed: {result.stderr}"
+    assert (
+        result.returncode == 0
+    ), f"{msgname} run\n{result.args}\nfailed:\nOUT:{result.stdout}\nERR:{result.stderr}"
