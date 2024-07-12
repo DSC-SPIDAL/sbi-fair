@@ -1,0 +1,16 @@
+description: Generation of Calorimeter Showers with Normalizing Flows 
+name: CaloFlow
+homepage: https://gitlab.com/claudius-krause/caloflow
+references:
+  - https://doi.org/10.1103/PhysRevD.107.113003
+  - https://arxiv.org/abs/2106.05285
+  - https://doi.org/10.1103/PhysRevD.107.113004
+  - https://arxiv.org/abs/2110.11377
+repository:
+  type: git
+  url:  https://gitlab.com/claudius-krause/caloflow.git
+  commit: 92ce1eb251eac4aba7e81c5a193e849a19449b03
+datasets:
+  - caloflow/caloflow_eplus
+  - caloflow/caloflow_gamma
+  - caloflow/caloflow_piplus

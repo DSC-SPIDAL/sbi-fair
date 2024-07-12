@@ -1,0 +1,15 @@
+- name: caloflow_eplus
+  process: loader.sh
+  data_files:
+    - split: default
+      url: https://zenodo.org/records/5904188/files/eplus.tar.gz
+- name: caloflow_gamma
+  process: loader.sh
+  data_files:
+    - split: default
+      url: https://zenodo.org/records/5904188/files/gamma.tar.gz
+- name: caloflow_piplus
+  process: loader.sh
+  data_files:
+    - split: default
+      url: https://zenodo.org/records/5904188/files/piplus.tar.gz

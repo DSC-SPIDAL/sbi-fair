@@ -1,0 +1,8 @@
+app: train
+dataset:
+  source: caloflow/caloflow_eplus
+  mounts: 
+    - default:/input/train_dataset
+options:
+  epochs: 2
+  particle_type: eplus

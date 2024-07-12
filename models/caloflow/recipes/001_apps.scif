@@ -1,0 +1,58 @@
+%apphelp model
+This is placeholder app to reference the model and related files
+This model is installed using separate build stage
+
+%apphelp helpers
+This is placeholder app to reference the helpers files
+These helpers are installed using separate build stage
+#################################
+# Train app
+%apphelp train
+Train the model given the train and validation datasets and relevant
+parameters. Outputs trained model as /output/model
+
+%apprun train
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export OUTPUT_MODEL=${OUTPUT_DIR}/model
+export TRAIN_DATASET=${INPUT_DIR}/train_dataset
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+CMD_OPTIONS=''
+
+if [ -f ${MODEL_OPTIONS} ]; then
+    CMD_OPTIONS=$(${SCIF_APPBIN_helpers}/yaml_to_cmd.py ${MODEL_OPTIONS})
+    CMD_OPTIONS=${CMD_OPTIONS/--epochs/--n_epochs} # for compatibility with other models
+fi
+if [[ "${CMD_OPTIONS}" != *"particle_type"* ]]; then
+    echo "Need to provide particle_type in options.yaml matching the dataset: eplus, piplus, gamma"
+    exit 1
+fi
+# Prepare directory structure
+mkdir -p ${OUTPUT_DIR}/saved_checkpoints/Flow_I/
+mkdir -p ${OUTPUT_DIR}/saved_checkpoints/Flow_II/
+
+eval python3 ${SCIF_APPROOT_model}/caloflow/run.py --train --data_dir=${TRAIN_DATASET} --output_dir ${OUTPUT_DIR} ${CMD_OPTIONS}
+
+#################################
+# Evaluate app
+%apphelp evaluate
+Evaluate the model given a trained model and test dataset
+
+%apprun evaluate
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export INPUT_MODEL=${INPUT_DIR}/model
+export TEST_DATASET=${INPUT_DIR}/test_dataset
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
+
+#################################
+# Production app
+%apphelp run
+Run the specified trained model given the input dataset.
+
+%apprun run
+echo "Not implemented"
+export INPUT_DIR=/input
+export OUTPUT_DIR=/output
+export INPUT_MODEL=${INPUT_DIR}/model
+export MODEL_OPTIONS=${INPUT_DIR}/options.yaml
