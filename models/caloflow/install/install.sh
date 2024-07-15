@@ -12,4 +12,5 @@ PROJECT_DIR="caloflow"
 export PROJECT_DIR
 
 "${DIR}"/000_checkout.sh &&
-"${DIR}"/002_deploy.sh
+    "${DIR}"/001_modify.sh &&
+    "${DIR}"/002_deploy.sh

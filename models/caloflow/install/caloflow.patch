@@ -1,0 +1,500 @@
+diff --git a/plot_all_particles.py b/plot_all_particles.py
+index 4027a16..d2c9857 100644
+--- a/plot_all_particles.py
++++ b/plot_all_particles.py
+@@ -35,6 +35,9 @@ import matplotlib.pyplot as plt
+ 
+ import plotting_helper as plthlp
+ 
++from pathlib import Path
++PATH = Path(__file__).parent.absolute()
++
+ parser = argparse.ArgumentParser()
+ 
+ parser.add_argument('--eplus_file', default=None, help='path/to/CaloFlow_eplus.hdf5')
+@@ -116,7 +119,7 @@ def plot_total_energy(particle_list, which_list, layer_0_list, layer_1_list, lay
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]['energy_layer_0_{:1.0e}'.format(geant_thres)]
+             reference = reference + reference_data.loc[particle]\
+                 ['energy_layer_1_{:1.0e}'.format(geant_thres)]
+@@ -128,7 +131,7 @@ def plot_total_energy(particle_list, which_list, layer_0_list, layer_1_list, lay
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['energy_layer_0']
+                 reference = reference + reference_data.loc[particle]['energy_layer_1']
+                 reference = reference + reference_data.loc[particle]['energy_layer_2']
+@@ -211,7 +214,7 @@ def plot_layer_energy(particle_list, which_list, layer_list, filename, layer,
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]\
+                 ['energy_layer_{}_{:1.0e}'.format(str(layer), geant_thres)]
+             label = GEANT_legend_dict[particle]
+@@ -219,7 +222,7 @@ def plot_layer_energy(particle_list, which_list, layer_list, filename, layer,
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['energy_layer_{}'.format(str(layer))]
+                 label = GAN_legend_dict[particle]
+                 _ = plt.hist(reference / 1000., bins=bins, histtype='step',
+@@ -316,7 +319,7 @@ def plot_energy_fraction(particle_list, which_list, layer_0_list, layer_1_list,
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]\
+                 ['energy_layer_{}_{:1.0e}'.format(str(layer), geant_thres)]
+ 
+@@ -333,7 +336,7 @@ def plot_energy_fraction(particle_list, which_list, layer_0_list, layer_1_list,
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['energy_layer_{}'.format(str(layer))]
+ 
+                 reference_total = reference_data.loc[particle]['energy_layer_0']
+@@ -400,7 +403,7 @@ def plot_layer_sparsity(particle_list, which_list, layer_list, filename, layer,
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]\
+                 ['sparsity_layer_{}_{:1.0e}'.format(str(layer), geant_thres)]
+             label = GEANT_legend_dict[particle]
+@@ -408,7 +411,7 @@ def plot_layer_sparsity(particle_list, which_list, layer_list, filename, layer,
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['sparsity_layer_{}'.format(str(layer))]
+                 label = GAN_legend_dict[particle]
+                 _ = plt.hist(reference, bins=bins, histtype='step',
+@@ -469,7 +472,7 @@ def plot_layer_E_ratio(particle_list, which_list, layer_list, filename, layer,
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+ 
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference_1 = reference_data.loc[particle]\
+                 ['E_1_layer_{}_{:1.0e}'.format(layer, geant_thres)]
+             reference_2 = reference_data.loc[particle]\
+@@ -480,7 +483,7 @@ def plot_layer_E_ratio(particle_list, which_list, layer_list, filename, layer,
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference_1 = reference_data.loc[particle]['E_1_layer_{}'.format(layer)]
+                 reference_2 = reference_data.loc[particle]['E_2_layer_{}'.format(layer)]
+                 reference = ((reference_1 - reference_2) / (reference_2 + reference_1+1e-16))
+@@ -547,7 +550,7 @@ def plot_shower_depth(particle_list, which_list, layer_0_list, layer_1_list, lay
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference_0 = reference_data.loc[particle]\
+                 ['energy_layer_0_{:1.0e}'.format(geant_thres)]
+             reference_1 = reference_data.loc[particle]\
+@@ -562,7 +565,7 @@ def plot_shower_depth(particle_list, which_list, layer_0_list, layer_1_list, lay
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference_0 = reference_data.loc[particle]['energy_layer_0']
+                 reference_1 = reference_data.loc[particle]['energy_layer_1']
+                 reference_2 = reference_data.loc[particle]['energy_layer_2']
+@@ -636,7 +639,7 @@ def plot_depth_weighted_total_energy(particle_list, which_list, layer_0_list, la
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]['energy_layer_1_{:1.0e}'.format(geant_thres)]
+             reference = reference + 2.*reference_data.loc[particle]\
+                 ['energy_layer_2_{:1.0e}'.format(geant_thres)]
+@@ -645,7 +648,7 @@ def plot_depth_weighted_total_energy(particle_list, which_list, layer_0_list, la
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['energy_layer_1']
+                 reference = reference + 2.*reference_data.loc[particle]['energy_layer_2']
+                 label = GAN_legend_dict[particle]
+@@ -726,7 +729,7 @@ def plot_layer_lateral_width(particle_list, which_list, layer_list, filename, la
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]\
+                 ['layer_{}_lateral_width_{:1.0e}'.format(str(layer), geant_thres)]
+             label = GEANT_legend_dict[particle]
+@@ -734,7 +737,7 @@ def plot_layer_lateral_width(particle_list, which_list, layer_list, filename, la
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]\
+                     ['layer_{}_lateral_width'.format(str(layer))]
+                 label = GAN_legend_dict[particle]
+@@ -812,7 +815,7 @@ def plot_depth_weighted_energy_normed(particle_list, which_list, layer_0_list, l
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set".format(geant_thres))
+ 
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]['energy_layer_1_{:1.0e}'.format(geant_thres)]
+             reference = reference + 2.*reference_data.loc[particle]\
+                 ['energy_layer_2_{:1.0e}'.format(geant_thres)]
+@@ -827,7 +830,7 @@ def plot_depth_weighted_energy_normed(particle_list, which_list, layer_0_list, l
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['energy_layer_1']
+                 reference = reference + 2.*reference_data.loc[particle]['energy_layer_2']
+                 reference = reference / (reference_data.loc[particle]['energy_layer_0']+
+@@ -903,7 +906,7 @@ def plot_depth_weighted_energy_normed_std(particle_list, which_list, layer_0_lis
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference1 = reference_data.loc[particle]\
+                 ['energy_layer_1_{:1.0e}'.format(geant_thres)]
+             reference2 = reference_data.loc[particle]\
+@@ -916,7 +919,7 @@ def plot_depth_weighted_energy_normed_std(particle_list, which_list, layer_0_lis
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference1 = reference_data.loc[particle]['energy_layer_1']
+                 reference2 = reference_data.loc[particle]['energy_layer_2']
+                 referencetot = reference1 + reference2 + reference_data.loc[particle]\
+@@ -1003,7 +1006,7 @@ def plot_brightest_voxel(particle_list, which_list, layer_list, filename, layer,
+             if geant_thres not in [0., 1e-1, 1e-2, 1e-3, 1e-4]:
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference = reference_data.loc[particle]\
+                 ['E_{}_layer_{}_{:1.0e}'.format(which_voxel, layer, geant_thres)]
+             reference_tot = reference_data.loc[particle]\
+@@ -1015,7 +1018,7 @@ def plot_brightest_voxel(particle_list, which_list, layer_list, filename, layer,
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference = reference_data.loc[particle]['E_{}_layer_{}'.format(which_voxel, layer)]
+                 reference_tot = reference_data.loc[particle]['energy_layer_{}'.format(layer)]
+                 reference = (reference/(reference_tot+ 1e-16))
+@@ -1088,7 +1091,7 @@ def plot_centroid_correlation(particle_list, which_list, layer1, layer1_list, la
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+ 
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference1 = reference_data.loc[particle]\
+                 ['layer_{}_centroid_{}_{:1.0e}'.format(str(layer1), str(scan), geant_thres)]
+             reference2 = reference_data.loc[particle]\
+@@ -1098,7 +1101,7 @@ def plot_centroid_correlation(particle_list, which_list, layer1, layer1_list, la
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference1 = reference_data.loc[particle]\
+                     ['layer_{}_centroid_{}'.format(str(layer1), str(scan))]
+                 reference2 = reference_data.loc[particle]\
+@@ -1165,7 +1168,7 @@ def plot_centroid(particle_list, which_list, layer1, layer1_list, filename, scan
+                 raise ValueError(
+                     "geant_thres {} not in pre-computed set.".format(geant_thres))
+ 
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(geant_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(geant_thres))
+             reference1 = reference_data.loc[particle]\
+                 ['layer_{}_centroid_{}_{:1.0e}'.format(str(layer1), str(scan), geant_thres)]
+             label = GEANT_legend_dict[particle]
+@@ -1173,7 +1176,7 @@ def plot_centroid(particle_list, which_list, layer1, layer1_list, filename, scan
+                          linewidth=2, alpha=0.2, density=True, color=color,
+                          label=label)
+             if plot_GAN:
+-                reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++                reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+                 reference1 = reference_data.loc[particle]\
+                     ['layer_{}_centroid_{}'.format(str(layer1), str(scan))]
+                 label = GAN_legend_dict[particle]
+diff --git a/plot_calo.py b/plot_calo.py
+index 1b9b60f..66bf189 100644
+--- a/plot_calo.py
++++ b/plot_calo.py
+@@ -33,6 +33,9 @@ from sklearn.neighbors import NearestNeighbors
+ 
+ import plotting_helper as plthlp
+ 
++from pathlib import Path
++PATH = Path(__file__).parent.absolute()
++
+ #irange = range
+ from torchvision.utils import make_grid
+ 
+@@ -226,7 +229,7 @@ def plot_layer_energy(tensor, fp, layer, save_it=True, plot_ref=None, epoch_nr=N
+             raise ValueError(
+                 "lower_threshold {} not in pre-computed set for plot_ref".format(ref_thres))
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['energy_layer_{}_{:1.0e}'.format(str(layer), ref_thres)]
+             color = COLORS[plot_ref]
+@@ -246,7 +249,7 @@ def plot_layer_energy(tensor, fp, layer, save_it=True, plot_ref=None, epoch_nr=N
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_GAN]\
+                 ['energy_layer_{}'.format(str(layer))]
+             color = COLORS[plot_ref]
+@@ -312,7 +315,7 @@ def plot_total_energy(tensor, fp, save_it=True, plot_ref=None, epoch_nr=None,
+             raise ValueError(
+                 "lower_threshold {} not in pre-computed set for plot_ref".format(ref_thres))
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['energy_layer_0_{:1.0e}'.format(ref_thres)]
+ 
+@@ -334,7 +337,7 @@ def plot_total_energy(tensor, fp, save_it=True, plot_ref=None, epoch_nr=None,
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['energy_layer_0']
+ 
+             reference = reference + reference_data.loc[plot_ref]['energy_layer_1']
+@@ -423,7 +426,7 @@ def plot_energy_fraction(tensor, fp, layer, save_it=True, plot_ref=None, epoch_n
+             raise ValueError(
+                 "lower_threshold {} not in pre-computed set for plot_ref".format(ref_thres))
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['energy_layer_{}_{:1.0e}'.format(str(layer), ref_thres)]
+ 
+@@ -447,7 +450,7 @@ def plot_energy_fraction(tensor, fp, layer, save_it=True, plot_ref=None, epoch_n
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['energy_layer_{}'.format(str(layer))]
+ 
+             reference_total = reference_data.loc[plot_ref]['energy_layer_0']
+@@ -519,7 +522,7 @@ def plot_layer_sparsity(tensor, fp, layer, save_it=True, plot_ref=None, epoch_nr
+             raise ValueError(
+                 "threshold {} not in pre-computed set for plot_ref".format(ref_thres))
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['sparsity_layer_{}_{:1.0e}'.format(str(layer), ref_thres)]
+             color = COLORS[plot_ref]
+@@ -536,7 +539,7 @@ def plot_layer_sparsity(tensor, fp, layer, save_it=True, plot_ref=None, epoch_nr
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['sparsity_layer_{}'.format(str(layer))]
+             color = COLORS[plot_ref]
+             if plot_ref == 'eplus':
+@@ -682,7 +685,7 @@ def plot_layer_E_ratio(tensor, fp, layer, save_it=True, plot_ref=None, epoch_nr=
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference_1 = reference_data.loc[plot_ref]\
+                 ['E_1_layer_{}_{:1.0e}'.format(layer, ref_thres)]
+             reference_2 = reference_data.loc[plot_ref]\
+@@ -708,7 +711,7 @@ def plot_layer_E_ratio(tensor, fp, layer, save_it=True, plot_ref=None, epoch_nr=
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference_1 = reference_data.loc[plot_ref]['E_1_layer_{}'.format(layer)]
+             reference_2 = reference_data.loc[plot_ref]['E_2_layer_{}'.format(layer)]
+             reference = ((reference_1 - reference_2) / (reference_2 + reference_1+1e-16))
+@@ -773,7 +776,7 @@ def plot_shower_depth(tensor, fp, save_it=True, plot_ref=None, epoch_nr=None, lo
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference_0 = reference_data.loc[plot_ref]\
+                 ['energy_layer_0_{:1.0e}'.format(ref_thres)]
+             reference_1 = reference_data.loc[plot_ref]\
+@@ -800,7 +803,7 @@ def plot_shower_depth(tensor, fp, save_it=True, plot_ref=None, epoch_nr=None, lo
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference_0 = reference_data.loc[plot_ref]['energy_layer_0']
+             reference_1 = reference_data.loc[plot_ref]['energy_layer_1']
+             reference_2 = reference_data.loc[plot_ref]['energy_layer_2']
+@@ -1019,7 +1022,7 @@ def plot_brightest_voxel(tensor, fp, layer, which_voxel=1, save_it=True, plot_re
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus'] and which_voxel in [1, 2, 3, 4, 5]:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['E_{}_layer_{}_{:1.0e}'.format(which_voxel, layer, ref_thres)]
+             reference_tot = reference_data.loc[plot_ref]\
+@@ -1047,7 +1050,7 @@ def plot_brightest_voxel(tensor, fp, layer, which_voxel=1, save_it=True, plot_re
+                             )
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus'] and which_voxel in [1, 2, 3, 4, 5]:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['E_{}_layer_{}'.format(which_voxel, layer)]
+             reference_tot = reference_data.loc[plot_ref]['energy_layer_{}'.format(layer)]
+             reference = (reference/(reference_tot+ 1e-16))
+@@ -1111,7 +1114,7 @@ def plot_depth_weighted_total_energy(tensor, fp, save_it=True, plot_ref=None, ep
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['energy_layer_1_{:1.0e}'.format(ref_thres)]
+             reference = reference + 2.*reference_data.loc[plot_ref]\
+@@ -1130,7 +1133,7 @@ def plot_depth_weighted_total_energy(tensor, fp, save_it=True, plot_ref=None, ep
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['energy_layer_1']
+             reference = reference + 2.*reference_data.loc[plot_ref]['energy_layer_2']
+             color = COLORS[plot_ref]
+@@ -1190,7 +1193,7 @@ def plot_depth_weighted_energy_normed(tensor, fp, save_it=True, plot_ref=None, e
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['energy_layer_1_{:1.0e}'.format(ref_thres)]
+             reference = reference + 2.*reference_data.loc[plot_ref]\
+@@ -1215,7 +1218,7 @@ def plot_depth_weighted_energy_normed(tensor, fp, save_it=True, plot_ref=None, e
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['energy_layer_1']
+             reference = reference + 2.*reference_data.loc[plot_ref]['energy_layer_2']
+             reference = reference / (reference_data.loc[plot_ref]['energy_layer_0']+
+@@ -1275,7 +1278,7 @@ def plot_depth_weighted_energy_normed_std(tensor, fp, save_it=True, plot_ref=Non
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference1 = reference_data.loc[plot_ref]\
+                 ['energy_layer_1_{:1.0e}'.format(ref_thres)]
+             reference2 = reference_data.loc[plot_ref]\
+@@ -1297,7 +1300,7 @@ def plot_depth_weighted_energy_normed_std(tensor, fp, save_it=True, plot_ref=Non
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference1 = reference_data.loc[plot_ref]['energy_layer_1']
+             reference2 = reference_data.loc[plot_ref]['energy_layer_2']
+             referencetot = reference1 + reference2 + reference_data.loc[plot_ref]['energy_layer_0']
+@@ -1371,7 +1374,7 @@ def plot_layer_lateral_width(tensor, fp, layer, save_it=True, plot_ref=None, epo
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference = reference_data.loc[plot_ref]\
+                 ['layer_{}_lateral_width_{:1.0e}'.format(str(layer), ref_thres)]
+             color = COLORS[plot_ref]
+@@ -1388,7 +1391,7 @@ def plot_layer_lateral_width(tensor, fp, layer, save_it=True, plot_ref=None, epo
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference = reference_data.loc[plot_ref]['layer_{}_lateral_width'.format(str(layer))]
+             color = COLORS[plot_ref]
+             if plot_ref == 'eplus':
+@@ -1462,7 +1465,7 @@ def plot_centroid_correlation(tensor, fp, layer1, layer2, scan='phi', save_it=Tr
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference1 = reference_data.loc[plot_ref]\
+                 ['layer_{}_centroid_{}_{:1.0e}'.format(str(layer1), str(scan), ref_thres)]
+             reference2 = reference_data.loc[plot_ref]\
+@@ -1481,7 +1484,7 @@ def plot_centroid_correlation(tensor, fp, layer1, layer2, scan='phi', save_it=Tr
+             raise ValueError("'{}' is not a valid reference name".format(plot_ref))
+     if plot_GAN is not None:
+         if plot_GAN in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_CaloGAN.hdf')
++            reference_data = pd.read_hdf(PATH / 'plots_reference_CaloGAN.hdf')
+             reference1 = reference_data.loc[plot_ref]\
+                 ['layer_{}_centroid_{}'.format(str(layer1), str(scan))]
+             reference2 = reference_data.loc[plot_ref]\
+diff --git a/plot_noise.py b/plot_noise.py
+index baef483..b42e969 100644
+--- a/plot_noise.py
++++ b/plot_noise.py
+@@ -27,6 +27,8 @@ import matplotlib.pyplot as plt
+ import plot_calo
+ from data import CaloDataset
+ 
++from pathlib import Path
++PATH = Path(__file__).parent.absolute()
+ 
+ parser = argparse.ArgumentParser()
+ 
+@@ -159,7 +161,7 @@ def plot_E_ratio_0(tensor_noise, tensor_plain, fp, save_it=True, lower_threshold
+         if ref_thres is None:
+             ref_thres = lower_threshold
+         if plot_ref in ['eplus', 'gamma', 'piplus']:
+-            reference_data = pd.read_hdf('plots_reference_{:1.0e}.hdf'.format(ref_thres))
++            reference_data = pd.read_hdf(PATH / 'plots_reference_{:1.0e}.hdf'.format(ref_thres))
+             reference_1 = reference_data.loc[plot_ref]['E_1_layer_0_{:1.0e}'.format(ref_thres)]
+             reference_2 = reference_data.loc[plot_ref]['E_2_layer_0_{:1.0e}'.format(ref_thres)]
+             reference = ((reference_1 - reference_2) / (reference_2 + reference_1))[reference_1 > 0]
