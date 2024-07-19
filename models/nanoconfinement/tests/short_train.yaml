@@ -1,9 +1,9 @@
 app: train
-dataset:
-  source: nanoconfinement/nanoconfinement_4050
-  mounts: 
-    - train/data_dump_density_preprocessed_train.pk:/input/train_dataset
-    - test/data_dump_density_preprocessed_test.pk:/input/test_dataset
+datasets:
+  - source: nanoconfinement/nanoconfinement_4050
+    mounts:
+      - train/data_dump_density_preprocessed_train.pk:/input/train_dataset
+      - test/data_dump_density_preprocessed_test.pk:/input/test_dataset
 
 options:
   epochs: 2

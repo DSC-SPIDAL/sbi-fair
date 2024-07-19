@@ -1,8 +1,8 @@
 app: train
-dataset:
-  source: autophasenn/aicdi_sample
-  mounts: 
-    - default:/input/train_dataset
+datasets:
+  - source: autophasenn/aicdi_sample
+    mounts:
+      - default:/input/train_dataset
 options:
   epochs: 2
   gpu_num: 1

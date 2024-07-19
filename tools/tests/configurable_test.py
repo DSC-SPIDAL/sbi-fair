@@ -14,10 +14,10 @@ class ContainerSystem(object):
         self.surrogate_path = surrogate_path
         self.workdir = surrogate_path
 
-    def run(self, test_config, output_dir, input_dir, gpu_switch):
+    def run(self, test_config, output_dir, input_mounts, gpu_switch):
         with open(output_dir / "options.yaml", "w") as fh:
             yaml.dump(test_config["options"], fh)
-        cmd = self.get_cmd(test_config, output_dir, input_dir, gpu_switch)
+        cmd = self.get_cmd(test_config, output_dir, input_mounts, gpu_switch)
         print(cmd)
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         return result
@@ -37,14 +37,14 @@ class Apptainer(ContainerSystem):
     def exists(self):
         return (self.surrogate_path / self.container_name).exists()
 
-    def get_cmd(self, test_config, output_dir, input_dir, gpu_switch):
+    def get_cmd(self, test_config, output_dir, input_mounts, gpu_switch):
         """Command to run to execute app"""
         app = test_config["app"]
-        input_mounts = " ".join(
-            [f"-B {input_dir}/{mount}" for mount in test_config["dataset"]["mounts"]]
+        input_mounts_switches = " ".join(
+            [f"-B {input_dir}:{mount}" for input_dir, mount in input_mounts]
         )
 
-        cmd = f"apptainer run --app {app} {self.gpu_switch[gpu_switch]} {input_mounts} -B {output_dir}:/output -B {output_dir}/options.yaml:/input/options.yaml {self.surrogate_path / self.container_name}"
+        cmd = f"apptainer run --app {app} {self.gpu_switch[gpu_switch]} {input_mounts_switches} -B {output_dir}:/output -B {output_dir}/options.yaml:/input/options.yaml {self.surrogate_path / self.container_name}"
         return cmd
 
 
@@ -67,14 +67,14 @@ class Docker(ContainerSystem):
         )
         return result.stdout.strip() != ""
 
-    def get_cmd(self, test_config, output_dir, input_dir, gpu_switch):
+    def get_cmd(self, test_config, output_dir, input_mounts, gpu_switch):
         """Command to run to execute app"""
         app = test_config["app"]
-        input_mounts = " ".join(
-            [f"-v {input_dir}/{mount}" for mount in test_config["dataset"]["mounts"]]
+        input_mounts_switches = " ".join(
+            [f"-v {input_dir}:{mount}" for input_dir, mount in input_mounts]
         )
 
-        cmd = f"docker run {self.gpu_switch[gpu_switch]} {input_mounts} -v {output_dir}:/output -v {output_dir}/options.yaml:/input/options.yaml {self.container_name} run {app}"
+        cmd = f"docker run {self.gpu_switch[gpu_switch]} {input_mounts_switches} -v {output_dir}:/output -v {output_dir}/options.yaml:/input/options.yaml {self.container_name} run {app}"
         return cmd
 
 
@@ -109,23 +109,33 @@ def test_config(surrogate_path, test_config_name):
 
 
 @pytest.fixture(scope="session")
-def dataset(test_config, data_repo, pytestconfig):
-    input_dataset = test_config["dataset"]["source"].split("/")
-    dataset_config = data_repo / input_dataset[0] / "datasets.yaml"
-    cache_dir_name = (
-        hashlib.md5(bytes(dataset_config)).hexdigest() + "_" + input_dataset[1]
-    )
-    output_dir = pytestconfig.cache.mkdir(cache_dir_name)
-    # output_dir = tmp_path_factory.mktemp("data")
-    result = subprocess.run(
-        [TOOLS_PATH / "scripts" / "load_dataset.py", dataset_config, input_dataset[1]],
-        capture_output=True,
-        text=True,
-        cwd=output_dir,
-    )
-    assert result.returncode == 0, f"Dataset loading failed: {result.stderr}"
+def input_mounts(test_config, data_repo, pytestconfig):
+    datasets_mounts = []
+    for dataset in test_config["datasets"]:
+        input_dataset = dataset["source"].split("/")
+        dataset_config = data_repo / input_dataset[0] / "datasets.yaml"
+        cache_dir_name = (
+            hashlib.md5(bytes(dataset_config)).hexdigest() + "_" + input_dataset[1]
+        )
+        output_dir = pytestconfig.cache.mkdir(cache_dir_name)
+        # output_dir = tmp_path_factory.mktemp("data")
+        result = subprocess.run(
+            [
+                TOOLS_PATH / "scripts" / "load_dataset.py",
+                dataset_config,
+                input_dataset[1],
+            ],
+            capture_output=True,
+            text=True,
+            cwd=output_dir,
+        )
+        assert result.returncode == 0, f"Dataset loading failed: {result.stderr}"
 
-    return output_dir / input_dataset[1]
+        mounts = dataset["mounts"]
+        for m in mounts:
+            source, dest = m.split(":")
+            datasets_mounts.append([output_dir / input_dataset[1] / source, dest])
+    return datasets_mounts
 
 
 @pytest.fixture(scope="session")
@@ -150,10 +160,12 @@ def build_container(rebuild, container):
 
 @pytest.mark.parametrize("gpu_switch", ["gpu", "cpu"])
 def test_container(
-    dataset, build_container, gpu_switch, test_config, tmp_path, benchmark
+    input_mounts, build_container, gpu_switch, test_config, tmp_path, benchmark
 ):
     # Run the application
-    result = benchmark(build_container.run, test_config, tmp_path, dataset, gpu_switch)
+    result = benchmark(
+        build_container.run, test_config, tmp_path, input_mounts, gpu_switch
+    )
     # start_time = time.time()
     # end_time = time.time()
     msgname = (

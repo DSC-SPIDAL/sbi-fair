@@ -1,8 +1,11 @@
 app: train
-dataset:
-  source: caloflow/caloflow_eplus
-  mounts: 
-    - default:/input/train_dataset
+datasets:
+  - source: caloflow/caloflow_eplus
+    mounts:
+      - default:/input/train_dataset
+  - source: calogan/calogan_eplus
+    mounts:
+      - default/eplus.hdf5:/input/eplus.hdf5
 options:
   epochs: 2
   particle_type: eplus
